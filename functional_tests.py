@@ -33,7 +33,7 @@ class NewVisitorTest(unittest.TestCase):
 
 
         #check that it appears on the site
-        intputbox.send_keys(Keys.ENTER)
+        inputbox.send_keys(Keys.ENTER)
 
         table=self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
