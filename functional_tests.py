@@ -41,11 +41,18 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('1: Buy peacock feathers', [row.text for row in rows])	
 
         #add another item
-        self.fail('Finish the test!')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('use peacock feathers to make bait for fly fishing')
+        inputbox.send_keys(Keys.ENTER)
 
-    #check that both items appear
+
+        #check that both items appear
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('2: use peacock feathers to make bait for fly fishing',[row.text for row in rows])
 
     #check that there's now a unique URL
+        self.fail('Finish the test!')
 
     #visit that URL again and make sure the items are still there
 
