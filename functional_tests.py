@@ -11,6 +11,12 @@ class NewVisitorTest(unittest.TestCase):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
 
+    #helper method (used at least twice) 
+    def check_for_row_in_table(self, row_text):
+        table=self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
     def test_can_start_a_list_and_retrieve_later(self):
         """ A user visits the site"""
         self.browser.get('http://localhost:8000')
@@ -34,6 +40,7 @@ class NewVisitorTest(unittest.TestCase):
 
         #check that it appears on the site
         inputbox.send_keys(Keys.ENTER)
+        self.check_for_row_in_table('1: buy peacock feathers')
 
         table=self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
@@ -46,10 +53,9 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
 
 
-        #check that both items appear
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('2: use peacock feathers to make bait for fly fishing',[row.text for row in rows])
+        #check that both items appear (refactored) 
+        self.check_for_row_in_table('1: buy peacock feathers')
+        self.check_for_row_in_table('2: use peacock feathers to make bait for fly fishing')
 
     #check that there's now a unique URL
         self.fail('Finish the test!')
@@ -59,6 +65,8 @@ class NewVisitorTest(unittest.TestCase):
     def tearDown(self):
         """ If there are no exceptions, close the browser windows when you're done."""
         browser.quit()
+    
+   
 
 if __name__=='__main__':
     #unittest.main(warnings='ignore')
