@@ -1,11 +1,14 @@
 #python3
 
+from django.test import LiveServerTestCase
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-import unittest
+
+#import unittest
 
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -18,8 +21,12 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn(row_text, [row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_later(self):
-        """ A user visits the site"""
-        self.browser.get('http://localhost:8000')
+        """ A user visits the site.
+        Takes advantage of the LiveServerTestCase module"""
+        
+        self.browser.get(self.live_server_url)
+
+        #self.browser.get('http://localhost:8000')
 
         #User notices the header and title
         self.assertIn('To-Do', self.browser.title)
@@ -35,12 +42,12 @@ class NewVisitorTest(unittest.TestCase):
         )
 
         #type into a text box
-        inputbox.send_keys('buy peacock feathers')
+        inputbox.send_keys('Buy peacock feathers')
 
 
         #check that it appears on the site
         inputbox.send_keys(Keys.ENTER)
-        self.check_for_row_in_table('1: buy peacock feathers')
+        self.check_for_row_in_table('1: Buy peacock feathers')
 
         table=self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
@@ -54,7 +61,7 @@ class NewVisitorTest(unittest.TestCase):
 
 
         #check that both items appear (refactored) 
-        self.check_for_row_in_table('1: buy peacock feathers')
+        self.check_for_row_in_table('1: Buy peacock feathers')
         self.check_for_row_in_table('2: use peacock feathers to make bait for fly fishing')
 
     #check that there's now a unique URL
@@ -68,7 +75,9 @@ class NewVisitorTest(unittest.TestCase):
     
    
 
-if __name__=='__main__':
+#not needed b/c running with python3 manage.py test functional_tests command through django
+
+#if __name__=='__main__':
     #unittest.main(warnings='ignore')
-    unittest.main()
+#    unittest.main()
 
