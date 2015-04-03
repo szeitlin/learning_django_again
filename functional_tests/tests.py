@@ -43,23 +43,23 @@ class NewVisitorTest(LiveServerTestCase):
 
         #type into a text box
         inputbox.send_keys('Buy peacock feathers')
+        inputbox.send_keys(Keys.ENTER)
 
         #check that it appears on the site
-        inputbox.send_keys(Keys.ENTER)
         edith_list_url = self.browser.current_url
+        print(edith_list_url)
         self.assertRegex(edith_list_url,'/lists/.+')
         self.check_for_row_in_table('1: Buy peacock feathers')
 
         table=self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
 
-        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])	
+        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
 
         #add another item
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('use peacock feathers to make bait for fly fishing')
         inputbox.send_keys(Keys.ENTER)
-
 
         #check that both items appear in Edith's list (refactored) 
         self.check_for_row_in_table('1: Buy peacock feathers')
@@ -92,10 +92,20 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
 
-    #check that there's now a unique URL
-        #self.fail('Finish the test!')
+    def test_layout_and_styling(self):
+        #Edith goes to the home page
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024,768)
 
-    #visit that URL again and make sure the items are still there
+        #she notices the input box is nicely centered
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        # inputbox.send_keys('Is this working?')
+        # inputbox.send_keys(Keys.ENTER)
+        self.assertAlmostEqual(
+            inputbox.location['x'] + inputbox.size['width']/2,
+            512,
+            delta=5
+        )
 
     def tearDown(self):
         """ If there are no exceptions, close the browser windows when you're done."""
