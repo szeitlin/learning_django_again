@@ -1,10 +1,7 @@
-#python3
+__author__ = 'szeitlin'
 
-#from django.test import LiveServerTestCase
 import sys
-
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-
 from selenium import webdriver
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -36,20 +33,3 @@ class FunctionalTest(StaticLiveServerTestCase):
         table=self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
-
-
-
-
-
-
-
-
-
-   
-
-#not needed b/c running with python3 manage.py test functional_tests command through django
-
-#if __name__=='__main__':
-    #unittest.main(warnings='ignore')
-#    unittest.main()
-
